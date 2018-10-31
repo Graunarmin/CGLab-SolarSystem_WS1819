@@ -6,7 +6,7 @@ is a small cross-platform framework for learning OpenGL programming
 [Troubleshooting](https://github.com/wobakj/OpenGLFramework/wiki/Troubleshooting)
 
 ### Features
-* launcher encapsulating window and context management 
+* launcher encapsulating window and context management
 * example applications for usage of basic OpenGL objects
 * png & tga texture loading
 * obj model loading
@@ -15,7 +15,7 @@ is a small cross-platform framework for learning OpenGL programming
 * live shader reloading by pressing _R_
 
 ### Examples
-toggle compilation with cmake option _BUILD_EXAMPLES_ 
+toggle compilation with cmake option _BUILD_EXAMPLES_
 * **Immediate Mode** - application_fixed.cpp
 * **Vertex Buffer Object** - application_vbo.cpp
 * **Index Buffer Object** - application_indexed.cpp
