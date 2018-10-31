@@ -102,6 +102,10 @@ GLFWwindow* initialize(glm::uvec2 const& resolution, unsigned ver_major, unsigne
   else {
     std::cout << " compat" << std::endl;
   }
+  std::cout << "\n---- Key Commands: ----\n" << std::endl;
+
+  std::cout << "Zoom in: i \nZoom out: o \nMove up: w \nMove down: s \nMove left: a \nMove right: d" << std::endl;
+
   // activate error checking after each gl function call
   watch_gl_errors();
 
@@ -130,6 +134,8 @@ void set_callback_object(GLFWwindow* window, Application* app) {
         static_cast<Application*>(glfwGetWindowUserPointer(w))->mouse_callback(w, a, b);
   };
   glfwSetCursorPosCallback(window, mouse_func);
+
+
   // allow free mouse movement
   // register resizing function
   auto resize_func = [](GLFWwindow* w, int a, int b) {
