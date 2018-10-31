@@ -12,10 +12,10 @@ class CameraNode : public Node{
         
         bool getPerspective() const;
         bool getEnabled() const;
-        glm::mat4 getProjectionMatrix() const;
+        glm::fmat4 getProjectionMatrix() const;
 
         void setEnabled(bool enabled);
-        void setProjectionMatrix(glm::mat4 projectionMatrix);
+        void setProjectionMatrix(glm::fmat4 projectionMatrix);
 
         std::ostream& print(std::ostream& os) const override;
     
@@ -23,7 +23,7 @@ class CameraNode : public Node{
 
         bool isPerspective_;
         bool isEnabled_;
-        glm::mat4 projectionMatrix_;
+        glm::fmat4 projectionMatrix_;
 };
 
 #endif

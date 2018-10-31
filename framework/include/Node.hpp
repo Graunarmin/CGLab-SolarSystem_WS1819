@@ -26,25 +26,24 @@ class Node{
         std::string getName() const;
         std::string getPath() const;
         int getDepth() const;
-        glm::mat4 getLocalTransform() const;
-        glm::mat4 getWorldTransform() const;
+        glm::fmat4 getLocalTransform() const;
+        glm::fmat4 getWorldTransform() const;
+        float getSpeed() const;
+        glm::fvec3 getDistanceOrigin() const;
 
         //Setter
         void setParent(std::shared_ptr<Node> const& parent);
-        void setLocalTransform(glm::mat4 const& localTransfrom);
-        void setWorldTransform(glm::mat4 const& worldTransform);
+        void setLocalTransform(glm::fmat4 const& localTransfrom);
+        void setWorldTransform(glm::fmat4 const& worldTransform);
+        void setDistanceOrigin(glm::fvec3 const& distanceOrigin);
+        void setSpeed(float speed);
 
         void addChildren(std::shared_ptr<Node> const& child);
         Node removeChildren(std::string const& childName);
 
-        float getSpeed() const;
-        void setSpeed(float speed);
-
-        float getDistanceOrigin() const;
-        void setDistanceOrigin(float distanceOrigin);
-
         //kann überschrieben werden:
         virtual std::ostream& print(std::ostream& os) const;
+    
     
     protected:
         
@@ -54,10 +53,10 @@ class Node{
         std::string name_;
         std::string path_;
         int depth_;
-        glm::mat4 localTransform_;
-        glm::mat4 worldTransform_;
+        glm::fmat4 localTransform_;
+        glm::fmat4 worldTransform_;
         float speed_;
-        float distanceOrigin_;
+        glm::fvec3 distanceOrigin_;
 };
 
 std::ostream& operator<<(std::ostream& os, Node const& n);

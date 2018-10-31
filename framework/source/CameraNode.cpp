@@ -2,13 +2,13 @@
 
 CameraNode::CameraNode():
     Node{},
-    isPerspective_{true}, //??
-    isEnabled_{true}, //??
+    isPerspective_{true},
+    isEnabled_{true},
     projectionMatrix_{1.0f}{}
 
 CameraNode::CameraNode(bool isPerspective, bool isEnabled, 
-            glm::mat4 const& projectionMatrix):
-    Node{}, //hier müssten oben wahrscheinlich noch alle Parameter für übergeben werden!
+            glm::fmat4 const& projectionMatrix):
+    Node{},
     isPerspective_{isPerspective},
     isEnabled_{isEnabled},
     projectionMatrix_{projectionMatrix}{}
@@ -21,7 +21,7 @@ bool CameraNode::getEnabled() const{
     return isEnabled_;
 }
 
-glm::mat4 CameraNode::getProjectionMatrix() const{
+glm::fmat4 CameraNode::getProjectionMatrix() const{
     return projectionMatrix_;
 }
 
@@ -29,7 +29,7 @@ void CameraNode::setEnabled(bool enabled){
     isEnabled_ = enabled;
 }
 
-void CameraNode::setProjectionMatrix(glm::mat4 projectionMatrix){
+void CameraNode::setProjectionMatrix(glm::fmat4 projectionMatrix){
     projectionMatrix_ = projectionMatrix;
 }
 

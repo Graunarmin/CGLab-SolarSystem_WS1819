@@ -17,6 +17,7 @@ using namespace gl;
 #include <glm/gtc/matrix_inverse.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <memory>
+#include <glm/glm.hpp>
 
 #include <iostream>
 
@@ -45,112 +46,119 @@ void ApplicationSolar::render() const {
 
 void ApplicationSolar::initializePlanets() const{
 
+    //Load model
     model planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL);
 
+    //Initialize root: parent=nullptr, name=root, path=root, depth=0
     Node root{nullptr, "root", "root", 0};
     auto root_p = std::make_shared<Node>(root);
 
+    //Initialize sun: parent=pointer to root, name=sun, path=root/sun, depth=1
     GeometryNode sun{root_p, "sun", "root/sun", 1};
-    sun.setLocalTransform(glm::mat4{1.0f, 0.0f, 0.0f, 0.0f, 
+    //Set speed of movement
+    sun.setSpeed(0.0f); 
+    //Set distance to the origin
+    sun.setDistanceOrigin(glm::fvec3{0.0f, 0.0f, 0.0f});
+    //Set geometry
+    sun.setGeometry(planet_model);
+    //Transformationmatrix 
+    sun.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
                                     0.0f, 1.0f, 0.0f, 0.0f,
                                     0.0f, 0.0f, 1.0f, 0.0f, 
                                     0.0f, 0.0f, 0.0f, 1.0f});
-                                  // x     y      z
-    sun.setSpeed(0.0f); 
-    sun.setDistanceOrigin(0.0f);
-    sun.setGeometry(planet_model);
+                                // x(l/r), y(u/d), z(b/f), size
     auto sun_p = std::make_shared<GeometryNode>(sun);
 
+
+    //---------------------------------- Initialize Planets ---------------------------------
+    //Set size (in LocalTransform Matrix), speed and distance to origin
+
     GeometryNode mercury{sun_p, "mercury", "root/sun/mercury", 2};
-    mercury.setLocalTransform(glm::mat4{1.0f, 0.0f, 0.0f, 0.0f, 
-                                    0.0f, 1.0f, 0.0f, 0.0f,
-                                    0.0f, 0.0f, 1.0f, 0.0f, 
-                                    0.0f, 0.0f, 0.0f,2.5f});
-                                  // x     y      z
     mercury.setSpeed(0.7f); 
-    mercury.setDistanceOrigin(5.0f);
+    mercury.setDistanceOrigin(glm::fvec3{5.0f, 0.0f, 0.0f});
     mercury.setGeometry(planet_model);
+    mercury.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                        0.0f, 1.0f, 0.0f, 0.0f,
+                                        0.0f, 0.0f, 1.0f, 0.0f, 
+                                        0.0f, 0.0f, 0.0f, 2.5f});
+                                      // x     y      z
 
     GeometryNode venus{sun_p, "venus", "root/sun/venus", 2};
-    venus.setLocalTransform(glm::mat4{1.0f, 0.0f, 0.0f, 0.0f, 
-                                    0.0f, 1.0f, 0.0f, 0.0f,
-                                    0.0f, 0.0f, 1.0f, 0.0f, 
-                                    0.0f, 0.0f, 0.0f, 2.4f});
-                                  // x     y      z
     venus.setSpeed(0.6f); 
-    venus.setDistanceOrigin(8.0f);
+    venus.setDistanceOrigin(glm::fvec3{8.0f, 0.0f, 0.0f});
     venus.setGeometry(planet_model);
+    venus.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                      0.0f, 1.0f, 0.0f, 0.0f,
+                                      0.0f, 0.0f, 1.0f, 0.0f, 
+                                      0.0f, 0.0f, 0.0f, 2.3f});
 
     GeometryNode earth{sun_p, "earth", "root/sun/earth", 2};
-    earth.setLocalTransform(glm::mat4{1.0f, 0.0f, 0.0f, 0.0f, 
-                                    0.0f, 1.0f, 0.0f, 0.0f,
-                                    0.0f, 0.0f, 1.0f, 0.0f, 
-                                    0.0f, 0.0f, 0.0f, 2.3f});
-                                  // x     y      z
     earth.setSpeed(0.5f); 
-    earth.setDistanceOrigin(11.0f);
+    earth.setDistanceOrigin(glm::fvec3{11.0f, 0.0f, 0.0f});
     earth.setGeometry(planet_model);
+    earth.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                      0.0f, 1.0f, 0.0f, 0.0f,
+                                      0.0f, 0.0f, 1.0f, 0.0f, 
+                                      0.0f, 0.0f, 0.0f, 2.2f});
     auto earth_p = std::make_shared<GeometryNode>(earth);
 
+    //moon is a child from earth, so it's parent is a pointer to earth and the depth is 3
     GeometryNode moon{earth_p, "moon", "root/sun/earth/moon", 3};
-    moon.setLocalTransform(glm::mat4{1.0f, 0.0f, 0.0f, 0.0f, 
+    moon.setSpeed(0.8f); 
+    moon.setDistanceOrigin(glm::fvec3{5.5f, 0.0f, 0.0f}); //in this case: Distance from earth!
+    moon.setGeometry(planet_model);
+    moon.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
                                     0.0f, 1.0f, 0.0f, 0.0f,
                                     0.0f, 0.0f, 1.0f, 0.0f, 
-                                    11.0f, 6.0f, 0.0f, 3.5f});
-                                  // x     y      z
-    moon.setSpeed(0.5f); 
-    moon.setDistanceOrigin(11.0f);
-    moon.setGeometry(planet_model);
+                                    0.0f, 2.0f, 0.0f, 2.9f});
+                                // x(l/r), y(u/d), z(b/f), size
 
     GeometryNode mars{sun_p, "mars", "root/sun/mars", 2};
-    mars.setLocalTransform(glm::mat4{1.0f, 0.0f, 0.0f, 0.0f, 
+    mars.setSpeed(0.65f); 
+    mars.setDistanceOrigin(glm::fvec3{15.0f, 0.0f, 0.0f});
+    mars.setGeometry(planet_model);
+    mars.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
                                     0.0f, 1.0f, 0.0f, 0.0f,
                                     0.0f, 0.0f, 1.0f, 0.0f, 
                                     0.0f, 0.0f, 0.0f, 2.5f});
-                                  // x     y      z
-    mars.setSpeed(0.65f); 
-    mars.setDistanceOrigin(15.0f);
-    mars.setGeometry(planet_model);
 
     GeometryNode jupiter{sun_p, "jupiter", "root/sun/jupiter", 2};
-    jupiter.setLocalTransform(glm::mat4{1.0f, 0.0f, 0.0f, 0.0f, 
-                                    0.0f, 1.0f, 0.0f, 0.0f,
-                                    0.0f, 0.0f, 1.0f, 0.0f, 
-                                    0.0f, 0.0f, 0.0f, 1.8f});
-                                  // x     y      z
     jupiter.setSpeed(0.7f); 
-    jupiter.setDistanceOrigin(14.0f);
+    jupiter.setDistanceOrigin(glm::fvec3{14.0f, 0.0f, 0.0f});
     jupiter.setGeometry(planet_model);
+    jupiter.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                        0.0f, 1.0f, 0.0f, 0.0f,
+                                        0.0f, 0.0f, 1.0f, 0.0f, 
+                                        0.0f, 0.0f, 0.0f, 1.8f});
 
     GeometryNode saturn{sun_p, "saturn", "root/sun/saturn", 2};
-    saturn.setLocalTransform(glm::mat4{1.0f, 0.0f, 0.0f, 0.0f, 
-                                    0.0f, 1.0f, 0.0f, 0.0f,
-                                    0.0f, 0.0f, 1.0f, 0.0f, 
-                                    0.0f, 0.0f, 0.0f, 1.9f});
-                                  // x     y      z
     saturn.setSpeed(0.75f); 
-    saturn.setDistanceOrigin(17.0f);
+    saturn.setDistanceOrigin(glm::fvec3{17.0f, 0.0f, 0.0f});
     saturn.setGeometry(planet_model);
+    saturn.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                       0.0f, 1.0f, 0.0f, 0.0f,
+                                       0.0f, 0.0f, 1.0f, 0.0f, 
+                                       0.0f, 0.0f, 0.0f, 2.3f});
 
     GeometryNode uranus{sun_p, "uranus", "root/sun/uranus", 2};
-    uranus.setLocalTransform(glm::mat4{1.0f, 0.0f, 0.0f, 0.0f, 
-                                    0.0f, 1.0f, 0.0f, 0.0f,
-                                    0.0f, 0.0f, 1.0f, 0.0f, 
-                                    0.0f, 0.0f, 0.0f, 2.0f});
-                                  // x     y      z
     uranus.setSpeed(0.8f); 
-    uranus.setDistanceOrigin(21.0f);
+    uranus.setDistanceOrigin(glm::fvec3{21.0f, 0.0f, 0.0f});
     uranus.setGeometry(planet_model);
+    uranus.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                       0.0f, 1.0f, 0.0f, 0.0f,
+                                       0.0f, 0.0f, 1.0f, 0.0f, 
+                                       0.0f, 0.0f, 0.0f, 2.1f});
 
     GeometryNode neptun{sun_p, "neptun", "root/sun/neptun", 2};
-    neptun.setLocalTransform(glm::mat4{1.0f, 0.0f, 0.0f, 0.0f, 
-                                    0.0f, 1.0f, 0.0f, 0.0f,
-                                    0.0f, 0.0f, 1.0f, 0.0f, 
-                                    0.0f, 0.0f, 0.0f, 2.1f});
-                                  // x     y      z
-    neptun.setSpeed(0.5f); 
-    neptun.setDistanceOrigin(25.0f);
+    neptun.setSpeed(0.5f);
+    neptun.setDistanceOrigin(glm::fvec3{25.0f, 0.0f, 0.0f});
     neptun.setGeometry(planet_model);
+    neptun.setLocalTransform(glm::fmat4{1.0f, 0.0f, 0.0f, 0.0f, 
+                                       0.0f, 1.0f, 0.0f, 0.0f,
+                                       0.0f, 0.0f, 1.0f, 0.0f, 
+                                       0.0f, 0.0f, 0.0f, 2.1f});
+
+    //-------------------------------- Add planets to their parents ---------------------------------
 
     root.addChildren(sun_p);
     (*sun_p).addChildren(std::make_shared<GeometryNode>(mercury));
@@ -162,36 +170,47 @@ void ApplicationSolar::initializePlanets() const{
     (*sun_p).addChildren(std::make_shared<GeometryNode>(uranus));
     (*sun_p).addChildren(std::make_shared<GeometryNode>(neptun));
     (*earth_p).addChildren(std::make_shared<GeometryNode>(moon));
+
+    //------------------- Initialize SceneGraph and call planetTransformations() --------------------
     
     SceneGraph sceneGraph{"solarsystem", root};
     auto solarSystem = sceneGraph.getRoot().getChildrenList();
     planetTransformations(solarSystem);
+
   }
 
 
 void ApplicationSolar::planetTransformations(std::list<std::shared_ptr<Node>> const& childrenList) const{
 
+    // recursive traversal through SceneGraph
+    // visit each child in children_ and check whether they themselves have children which have to be visited
     for(auto const& planet: childrenList){
-        auto childPlanets = (*planet).getChildrenList();
-        //recursive traversal through SceneGraph 
+
+        auto childPlanets = planet->getChildrenList();
+
         if(childPlanets.size() > 0){   
-            planetTransformations(childPlanets);
+            planetTransformations(childPlanets); //recursive call
         }
 
-        //compute tranformations
-        // glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, float(glfwGetTime())*((*planet).getSpeed()), glm::fvec3{0.0f, 1.0f, 0.0f});
-        // model_matrix = glm::translate(model_matrix, glm::fvec3{0.0f+((*planet).getDistanceOrigin()), 0.0f, 1.0f});
+        //compute tranformations for each planet
+        glm::fmat4 model_matrix = glm::fmat4{1.0};
 
-        glm::fmat4 model_matrix = glm::rotate((*planet).getLocalTransform(), float(glfwGetTime())*((*planet).getSpeed()), glm::fvec3{0.0f, 1.0f, 0.0f});
-        model_matrix = glm::translate(model_matrix, glm::fvec3{0.0f+((*planet).getDistanceOrigin()), 0.0f, 1.0f});
+        if(planet->getDepth() == 3){
+            //moons need extra rotation around their parent planet
+            model_matrix = planet->getParent()->getLocalTransform();
+            model_matrix = glm::rotate(model_matrix, float(glfwGetTime())*(planet->getParent()->getSpeed()), glm::fvec3{0.0f, 1.0f, 0.0f});
+            model_matrix = glm::translate(model_matrix, planet->getParent()->getDistanceOrigin());
+        }
 
+        model_matrix = glm::rotate(model_matrix * planet->getLocalTransform(), float(glfwGetTime())*(planet->getSpeed()),glm::fvec3{0.0f, 1.0f, 0.0f});
+        model_matrix = glm::translate(model_matrix, planet->getDistanceOrigin());
+
+        //extra matrix for normal transformation to keep them orthogonal to surface
         glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform)* model_matrix);
-
 
         //give matrices to shaders
         glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"),
                      1, GL_FALSE, glm::value_ptr(model_matrix));
-
 
         glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
                      1, GL_FALSE, glm::value_ptr(normal_matrix));
@@ -285,6 +304,13 @@ void ApplicationSolar::initializeGeometry() {
 // handle key input
 void ApplicationSolar::keyCallback(int key, int action, int mods) {
 
+    //Zoom in: I
+    //Zoom out: O
+    //Move up: W
+    //Move down: S
+    //Move to the left: A
+    //Move to the right: D
+  
     //zoom in
     if (key == GLFW_KEY_I  && (action == GLFW_PRESS || action == GLFW_REPEAT)) {
         m_view_transform = glm::translate(m_view_transform, glm::fvec3{0.0f, 0.0f, -0.3f});
@@ -295,12 +321,12 @@ void ApplicationSolar::keyCallback(int key, int action, int mods) {
         m_view_transform = glm::translate(m_view_transform, glm::fvec3{0.0f, 0.0f, 0.3f});
         uploadView();
     }
-    //move to the left
+    //move left
     else if(key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT )){
         m_view_transform = glm::translate(m_view_transform, glm::fvec3{0.3f, 0.0f, 0.0f});
         uploadView();
     }
-    //move to the right
+    //move right
     else if(key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT )){
         m_view_transform = glm::translate(m_view_transform, glm::fvec3{-0.3f, 0.0f, 0.0f});
         uploadView();
@@ -340,6 +366,9 @@ void ApplicationSolar::mouseCallback(double pos_x, double pos_y) {
     }
     uploadView();
 
+    // //works, but it' very confusing combined with the stuff above - its this or the other 
+    // //(or do this while a mouse button is pressed maybe?)
+    //
     // //zooming in by movin up
     // if ((pos_x > 0 && pos_y < 0) || (pos_x < 0 && pos_y < 0)) {
     //     m_view_transform = glm::translate(m_view_transform, glm::fvec3{0.0f, 0.0f, -0.3f});

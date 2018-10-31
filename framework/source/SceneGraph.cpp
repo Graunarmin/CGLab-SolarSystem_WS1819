@@ -9,7 +9,7 @@ SceneGraph::SceneGraph(std::string const& name, Node const& root):
     root_{root}{}
 
 std::string SceneGraph::printGraph() const{
-    //I have no Idea how this is supposed to work
+    //see below function print() in line 33
     return 0;
 }
 
@@ -29,7 +29,6 @@ std::string SceneGraph::getName() const{
     return name_;
 }
 
-//Just for now and us, maybe that's helpful
 std::ostream& SceneGraph::print(std::ostream& os) const{
     os << "Name: " << name_ << "\n" << "Root: " << root_ << "\n";
     return os;

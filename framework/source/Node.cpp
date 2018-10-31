@@ -1,12 +1,13 @@
 #include "Node.hpp"
 
+//Constructors
 Node::Node():
     parent_(nullptr),
     children_(),
     name_("Node"), 
-    path_(), //Was zur Hölle soll das denn sein? Der Pfad zum Knoten? Aber wie?
+    path_(),
     depth_(0),
-    localTransform_(1.0f), //Einheitsmatrix
+    localTransform_(1.0f), //Identity Matrix‚
     worldTransform_(1.0f),
     speed_(1.0f),
     distanceOrigin_(0.0f){}
@@ -24,6 +25,7 @@ Node::Node(std::shared_ptr<Node> const& parent, std::string const& name,
     distanceOrigin_(0.0f){}
 
 
+//Getter
 std::shared_ptr<Node> Node::getParent() const{
     return parent_;
 }
@@ -34,7 +36,7 @@ Node Node::getChildren(std::string const& childName) const{
             return *child;
         }
     }
-    return Node{}; //was returnt man denn, wenn nix dabei war? --> keine Ahnung vllt sowas?
+    return Node{}; //If nothing was found: return empty node‚
 }
 
 std::list<std::shared_ptr<Node>> Node::getChildrenList() const{
@@ -53,12 +55,20 @@ int Node::getDepth() const{
     return depth_;
 }
 
-glm::mat4 Node::getLocalTransform() const{
+glm::fmat4 Node::getLocalTransform() const{
     return localTransform_;
 }
 
-glm::mat4 Node::getWorldTransform() const{
+glm::fmat4 Node::getWorldTransform() const{
     return worldTransform_;
+}
+
+float Node::getSpeed() const{
+    return speed_;
+}
+
+glm::fvec3 Node::getDistanceOrigin() const{
+    return distanceOrigin_;
 }
 
 void Node::addChildren(std::shared_ptr<Node> const& child){
@@ -76,31 +86,24 @@ Node Node::removeChildren(std::string const& childName){
     std::cout << "ERROR - " << childName << " does not exist in this List.";
 }
 
+//Setter‚
 void Node::setParent(std::shared_ptr<Node> const& parent){
     parent_ = parent;
 }
 
-void Node::setLocalTransform(glm::mat4 const& localTransform){
+void Node::setLocalTransform(glm::fmat4 const& localTransform){
     localTransform_ = localTransform;
 }
 
-void Node::setWorldTransform(glm::mat4 const& worldTransform){
+void Node::setWorldTransform(glm::fmat4 const& worldTransform){
     worldTransform_ = worldTransform;
-}
-
-float Node::getSpeed() const{
-    return speed_;
 }
 
 void Node::setSpeed(float speed){
     speed_ = speed;
 }
 
-float Node::getDistanceOrigin() const{
-    return distanceOrigin_;
-}
-
-void Node::setDistanceOrigin(float distanceOrigin){
+void Node::setDistanceOrigin(glm::fvec3 const& distanceOrigin){
     distanceOrigin_ = distanceOrigin;
 }
 
@@ -108,7 +111,7 @@ void Node::setDistanceOrigin(float distanceOrigin){
 std::ostream& Node::print(std::ostream& os) const{
     os << "name: " << name_ << "\n"
     << "path: " << path_ << "\n"
-    << "Parent: " << parent_ << "\n" 
+    << "Parent: " << parent_ -> getName() << "\n" 
     << "children: ";
     for(auto const& i: children_){
         os << i -> name_ <<", ";
