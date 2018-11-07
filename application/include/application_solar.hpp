@@ -27,11 +27,16 @@ class ApplicationSolar : public Application {
   // draw all objects
   void render() const;
   void planetTransformations(std::list<std::shared_ptr<Node>> const& childrenList) const;
-  void initializePlanets() const;
+  void drawOrbit(std::shared_ptr<Node> const& planet) const;
+  
+  
 
  protected:
   void initializeShaderPrograms();
   void initializeGeometry();
+  void initializePlanets();
+  void initializeStars();
+  void initializeOrbits();
   // update uniform values
   void uploadUniforms();
   // upload projection matrix
@@ -41,6 +46,15 @@ class ApplicationSolar : public Application {
 
   // cpu representation of model
   model_object planet_object;
+  model_object star_object;
+  model_object orbit_object;
+
+  SceneGraph sceneGraph_;
+
+  // vector to store the stars
+  std::vector<GLfloat> stars_;
+  // vector to store orbits
+  std::vector<GLfloat> orbits_;
   
   // camera transform matrix
   glm::fmat4 m_view_transform;

@@ -19,11 +19,12 @@ class SceneGraph{
         Node getRoot() const;
         std::string printGraph() const;
         std::ostream& print(std::ostream& os) const;
+        void setName(std::string const& name);
+        void setRoot(Node const& root);
 
     private:
 
-        void setName(std::string const& name);
-        void setRoot(Node const& root);
+        
 
         std::string name_;
         Node root_;

@@ -9,8 +9,10 @@ Node::Node():
     depth_(0),
     localTransform_(1.0f), //Identity Matrix‚
     worldTransform_(1.0f),
-    speed_(1.0f),
-    distanceOrigin_(0.0f){}
+    speed_(0.5f),
+    distanceOrigin_(0.0f),
+    radius_(1.0f),
+    selfRotation_(0.5f){}
 
 Node::Node(std::shared_ptr<Node> const& parent, std::string const& name, 
            std::string const& path, int depth):
@@ -21,8 +23,10 @@ Node::Node(std::shared_ptr<Node> const& parent, std::string const& name,
     depth_(depth),
     localTransform_(1.0f),
     worldTransform_(1.0f),
-    speed_(1.0f),
-    distanceOrigin_(0.0f){}
+    speed_(0.5f),
+    distanceOrigin_(0.0f),
+    radius_(1.0f),
+    selfRotation_(0.5f){}
 
 
 //Getter
@@ -36,7 +40,7 @@ Node Node::getChildren(std::string const& childName) const{
             return *child;
         }
     }
-    return Node{}; //If nothing was found: return empty node‚
+    return Node{}; //If nothing was found: return empty node
 }
 
 std::list<std::shared_ptr<Node>> Node::getChildrenList() const{
@@ -71,6 +75,14 @@ glm::fvec3 Node::getDistanceOrigin() const{
     return distanceOrigin_;
 }
 
+float Node::getRadius() const{
+    return radius_;
+}
+
+float Node::getSelfRotation() const{
+    return selfRotation_;
+}
+
 void Node::addChildren(std::shared_ptr<Node> const& child){
     children_.push_back(child);
 }
@@ -96,6 +108,7 @@ void Node::setLocalTransform(glm::fmat4 const& localTransform){
 }
 
 void Node::setWorldTransform(glm::fmat4 const& worldTransform){
+    //mit anderen Parametern bzw. mehr?
     worldTransform_ = worldTransform;
 }
 
@@ -103,8 +116,16 @@ void Node::setSpeed(float speed){
     speed_ = speed;
 }
 
+void Node::setRadius(float radius){
+    radius_ = radius;
+}
+
 void Node::setDistanceOrigin(glm::fvec3 const& distanceOrigin){
     distanceOrigin_ = distanceOrigin;
+}
+
+void Node::setSelfRotation(float selfRotation){
+    selfRotation_ = selfRotation;
 }
 
 //Just for now and us, maybe that's helpful

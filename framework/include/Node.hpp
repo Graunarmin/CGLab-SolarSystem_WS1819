@@ -30,6 +30,8 @@ class Node{
         glm::fmat4 getWorldTransform() const;
         float getSpeed() const;
         glm::fvec3 getDistanceOrigin() const;
+        float getRadius() const;
+        float getSelfRotation() const;
 
         //Setter
         void setParent(std::shared_ptr<Node> const& parent);
@@ -37,6 +39,8 @@ class Node{
         void setWorldTransform(glm::fmat4 const& worldTransform);
         void setDistanceOrigin(glm::fvec3 const& distanceOrigin);
         void setSpeed(float speed);
+        void setRadius(float radius);
+        void setSelfRotation(float rotation);
 
         void addChildren(std::shared_ptr<Node> const& child);
         Node removeChildren(std::string const& childName);
@@ -56,7 +60,9 @@ class Node{
         glm::fmat4 localTransform_;
         glm::fmat4 worldTransform_;
         float speed_;
+        float selfRotation_; //speed of self rotation
         glm::fvec3 distanceOrigin_;
+        float radius_;
 };
 
 std::ostream& operator<<(std::ostream& os, Node const& n);
