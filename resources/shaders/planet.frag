@@ -30,7 +30,7 @@ float shades = 3; //change for more "shading levels"
 float outline = 1;
 
 //output
-out vec4 out_Color;s
+out vec4 out_Color;
 
 void main() {
 
