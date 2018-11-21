@@ -17,7 +17,7 @@ class Node{
         //Constructors
         Node();
         Node(std::shared_ptr<Node> const& parent, std::string const& name,
-             std::string const& path, int depth);
+             std::string const& path, int depth, std::shared_ptr<Node> const& origin);
 
         //Getter
         std::shared_ptr<Node> getParent() const;
@@ -32,21 +32,27 @@ class Node{
         glm::fvec3 getDistanceOrigin() const;
         float getRadius() const;
         float getSelfRotation() const;
+        std::shared_ptr<Node> getOrigin() const;
+
 
         //Setter
         void setParent(std::shared_ptr<Node> const& parent);
         void setLocalTransform(glm::fmat4 const& localTransfrom);
-        void setWorldTransform(glm::fmat4 const& worldTransform);
+        void setWorldTransform(glm::fmat4 const& localTransform);
         void setDistanceOrigin(glm::fvec3 const& distanceOrigin);
         void setSpeed(float speed);
         void setRadius(float radius);
         void setSelfRotation(float rotation);
+        void setOrigin(std::shared_ptr<Node> const& origin);
 
         void addChildren(std::shared_ptr<Node> const& child);
         Node removeChildren(std::string const& childName);
 
         //kann überschrieben werden:
         virtual std::ostream& print(std::ostream& os) const;
+
+        void setColor(glm::fvec3 const& color);
+        glm::fvec3 getColor() const;
     
     
     protected:
@@ -63,6 +69,8 @@ class Node{
         float selfRotation_; //speed of self rotation
         glm::fvec3 distanceOrigin_;
         float radius_;
+        std::shared_ptr<Node> origin_;
+        glm::fvec3 color_;
 };
 
 std::ostream& operator<<(std::ostream& os, Node const& n);

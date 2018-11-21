@@ -105,7 +105,8 @@ GLFWwindow* initialize(glm::uvec2 const& resolution, unsigned ver_major, unsigne
   std::cout << "\n---- Key Commands: ----\n" << std::endl;
 
   std::cout << "Zoom in: i \nZoom out: o \nMove Camera up: w \nMove Camera down: s \n"
-  << "Move Camera left: a \nMove Camera right: d" << std::endl;
+  << "Move Camera left: a \nMove Camera right: d\n" 
+  << "Normal Shading: 1 \nCel Shading: 2" << std::endl;
 
   // activate error checking after each gl function call
   watch_gl_errors();

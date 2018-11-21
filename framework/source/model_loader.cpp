@@ -13,93 +13,93 @@ void generate_normals(tinyobj::mesh_t& model);
 std::vector<glm::fvec3> generate_tangents(tinyobj::mesh_t const& model);
 
 model obj(std::string const& name, model::attrib_flag_t import_attribs){
-  std::vector<tinyobj::shape_t> shapes;
-  std::vector<tinyobj::material_t> materials;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
 
-  std::string err = tinyobj::LoadObj(shapes, materials, name.c_str());
+    std::string err = tinyobj::LoadObj(shapes, materials, name.c_str());
 
-  if (!err.empty()) {
-    if (err[0] == 'W' && err[1] == 'A' && err[2] == 'R') {
-      std::cerr << "tinyobjloader: " << err << std::endl;    
-    }
-    else {
-      throw std::logic_error("tinyobjloader: " + err);    
-    }
-  }
-
-  model::attrib_flag_t attributes{model::POSITION | import_attribs};
-
-  std::vector<float> vertex_data;
-  std::vector<unsigned> triangles;
-
-  unsigned vertex_offset = 0;
-
-  for (auto& shape : shapes) {
-    tinyobj::mesh_t& curr_mesh = shape.mesh;
-    // prevent MSVC warning due to Win BOOL implementation
-    bool has_normals = (import_attribs & model::NORMAL) != 0;
-    if(has_normals) {
-      // generate normals if necessary
-      if (curr_mesh.normals.empty()) {
-        generate_normals(curr_mesh);
-      }
+    if (!err.empty()) {
+        if (err[0] == 'W' && err[1] == 'A' && err[2] == 'R') {
+            std::cerr << "tinyobjloader: " << err << std::endl;    
+        }
+        else {
+            throw std::logic_error("tinyobjloader: " + err);    
+        }
     }
 
-    bool has_uvs = (import_attribs & model::TEXCOORD) != 0;
-    if(has_uvs) {
-      if (curr_mesh.texcoords.empty()) {
-        has_uvs = false;
-        attributes ^= model::TEXCOORD;
-        std::cerr << "Shape has no texcoords" << std::endl;
-      }
+    model::attrib_flag_t attributes{model::POSITION | import_attribs};
+
+    std::vector<float> vertex_data;
+    std::vector<unsigned> triangles;
+
+    unsigned vertex_offset = 0;
+
+    for (auto& shape : shapes) {
+        tinyobj::mesh_t& curr_mesh = shape.mesh;
+        // prevent MSVC warning due to Win BOOL implementation
+        bool has_normals = (import_attribs & model::NORMAL) != 0;
+        if(has_normals) {
+            // generate normals if necessary
+            if (curr_mesh.normals.empty()) {
+                generate_normals(curr_mesh);
+            }
+        }
+
+        bool has_uvs = (import_attribs & model::TEXCOORD) != 0;
+        if(has_uvs) {
+            if (curr_mesh.texcoords.empty()) {
+                has_uvs = false;
+                attributes ^= model::TEXCOORD;
+                std::cerr << "Shape has no texcoords" << std::endl;
+            }
+        }
+
+        bool has_tangents = import_attribs & model::TANGENT;
+        std::vector<glm::fvec3> tangents;
+        if (has_tangents) {
+            if (!has_uvs) {
+                has_tangents = false;
+                attributes ^= model::TANGENT;
+                std::cerr << "Shape has no texcoords" << std::endl;
+            }
+            else {
+                tangents = generate_tangents(curr_mesh);
+            }
+        }
+
+        // push back vertex attributes
+        for (unsigned i = 0; i < curr_mesh.positions.size() / 3; ++i) {
+                vertex_data.push_back(curr_mesh.positions[i * 3]);
+                vertex_data.push_back(curr_mesh.positions[i * 3 + 1]);
+                vertex_data.push_back(curr_mesh.positions[i * 3 + 2]);
+
+            if (has_normals) {
+                vertex_data.push_back(curr_mesh.normals[i * 3]);
+                vertex_data.push_back(curr_mesh.normals[i * 3 + 1]);
+                vertex_data.push_back(curr_mesh.normals[i * 3 + 2]);
+            }
+
+            if (has_uvs) {
+                vertex_data.push_back(curr_mesh.texcoords[i * 2]);
+                vertex_data.push_back(curr_mesh.texcoords[i * 2 + 1]);
+            }
+
+            if (has_tangents) {
+                vertex_data.push_back(tangents[i].x);
+                vertex_data.push_back(tangents[i].y);
+                vertex_data.push_back(tangents[i].z);
+            }
+        }
+
+        // add triangles
+        for (unsigned i = 0; i < curr_mesh.indices.size(); ++i) {
+            triangles.push_back(vertex_offset + curr_mesh.indices[i]);
+        }
+
+        vertex_offset += unsigned(curr_mesh.positions.size() / 3);
     }
 
-    bool has_tangents = import_attribs & model::TANGENT;
-    std::vector<glm::fvec3> tangents;
-    if (has_tangents) {
-      if (!has_uvs) {
-        has_tangents = false;
-        attributes ^= model::TANGENT;
-        std::cerr << "Shape has no texcoords" << std::endl;
-      }
-      else {
-        tangents = generate_tangents(curr_mesh);
-      }
-    }
-
-    // push back vertex attributes
-    for (unsigned i = 0; i < curr_mesh.positions.size() / 3; ++i) {
-      vertex_data.push_back(curr_mesh.positions[i * 3]);
-      vertex_data.push_back(curr_mesh.positions[i * 3 + 1]);
-      vertex_data.push_back(curr_mesh.positions[i * 3 + 2]);
-
-      if (has_normals) {
-        vertex_data.push_back(curr_mesh.normals[i * 3]);
-        vertex_data.push_back(curr_mesh.normals[i * 3 + 1]);
-        vertex_data.push_back(curr_mesh.normals[i * 3 + 2]);
-      }
-
-      if (has_uvs) {
-        vertex_data.push_back(curr_mesh.texcoords[i * 2]);
-        vertex_data.push_back(curr_mesh.texcoords[i * 2 + 1]);
-      }
-
-      if (has_tangents) {
-        vertex_data.push_back(tangents[i].x);
-        vertex_data.push_back(tangents[i].y);
-        vertex_data.push_back(tangents[i].z);
-      }
-    }
-
-    // add triangles
-    for (unsigned i = 0; i < curr_mesh.indices.size(); ++i) {
-      triangles.push_back(vertex_offset + curr_mesh.indices[i]);
-    }
-
-    vertex_offset += unsigned(curr_mesh.positions.size() / 3);
-  }
-
-  return model{vertex_data, attributes, triangles};
+    return model{vertex_data, attributes, triangles};
 }
 
 void generate_normals(tinyobj::mesh_t& model) {

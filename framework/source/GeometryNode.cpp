@@ -5,8 +5,8 @@ GeometryNode::GeometryNode():
     geometry_{}{}
 
 GeometryNode::GeometryNode(std::shared_ptr<Node> const& parent, std::string const& name, 
-                           std::string const& path, int depth):
-    Node{parent, name, path, depth},
+                           std::string const& path, int depth, std::shared_ptr<Node> const& origin):
+    Node{parent, name, path, depth, origin},
     geometry_{}{}
 
 

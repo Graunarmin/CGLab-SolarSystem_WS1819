@@ -8,6 +8,7 @@
 #include "Node.hpp"
 #include <string>
 #include "GeometryNode.hpp"
+#include "PointLightNode.hpp"
 
 // gpu representation of model
 class ApplicationSolar : public Application {
@@ -28,7 +29,9 @@ class ApplicationSolar : public Application {
   void render() const;
   void planetTransformations(std::list<std::shared_ptr<Node>> const& childrenList) const;
   void drawOrbit(std::shared_ptr<Node> const& planet) const;
-  
+
+  //void setSun();
+  //PointLightNode getSun() const;
   
 
  protected:
@@ -41,6 +44,8 @@ class ApplicationSolar : public Application {
   void uploadUniforms();
   // upload projection matrix
   void uploadProjection();
+  //Upload if celshading or not
+  void uploadAppearance();
   // upload view matrix
   void uploadView();
 
@@ -60,6 +65,10 @@ class ApplicationSolar : public Application {
   glm::fmat4 m_view_transform;
   // camera projection matrix
   glm::fmat4 m_view_projection;
+
+  PointLightNode sun_l;
+
+  bool celShading_;
 };
 
 #endif

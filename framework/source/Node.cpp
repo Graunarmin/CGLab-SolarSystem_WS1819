@@ -12,10 +12,11 @@ Node::Node():
     speed_(0.5f),
     distanceOrigin_(0.0f),
     radius_(1.0f),
-    selfRotation_(0.5f){}
+    selfRotation_(0.5f),
+    origin_(nullptr){}
 
 Node::Node(std::shared_ptr<Node> const& parent, std::string const& name, 
-           std::string const& path, int depth):
+           std::string const& path, int depth, std::shared_ptr<Node> const& origin):
     parent_(parent),
     children_(),
     name_(name),
@@ -26,7 +27,8 @@ Node::Node(std::shared_ptr<Node> const& parent, std::string const& name,
     speed_(0.5f),
     distanceOrigin_(0.0f),
     radius_(1.0f),
-    selfRotation_(0.5f){}
+    selfRotation_(0.5f), 
+    origin_(origin){}
 
 
 //Getter
@@ -83,6 +85,18 @@ float Node::getSelfRotation() const{
     return selfRotation_;
 }
 
+std::shared_ptr<Node> Node::getOrigin() const{
+    return origin_;
+}
+
+void Node::setColor(glm::fvec3 const& color){
+    color_ = color;
+}
+
+glm::fvec3 Node::getColor() const{
+    return color_;
+}
+
 void Node::addChildren(std::shared_ptr<Node> const& child){
     children_.push_back(child);
 }
@@ -107,9 +121,9 @@ void Node::setLocalTransform(glm::fmat4 const& localTransform){
     localTransform_ = localTransform;
 }
 
-void Node::setWorldTransform(glm::fmat4 const& worldTransform){
-    //mit anderen Parametern bzw. mehr?
-    worldTransform_ = worldTransform;
+void Node::setWorldTransform(glm::fmat4 const& localTransform){
+    //mit Parametern?
+    worldTransform_ = getParent()->getWorldTransform() * localTransform;
 }
 
 void Node::setSpeed(float speed){
@@ -128,6 +142,10 @@ void Node::setSelfRotation(float selfRotation){
     selfRotation_ = selfRotation;
 }
 
+void Node::setOrigin(std::shared_ptr<Node> const& origin){
+    origin_ = origin;
+}
+
 //Just for now and us, maybe that's helpful
 std::ostream& Node::print(std::ostream& os) const{
     os << "name: " << name_ << "\n"
@@ -138,7 +156,8 @@ std::ostream& Node::print(std::ostream& os) const{
         os << i -> name_ <<", ";
     } 
     os << "\n"
-    << "depth: " << depth_ << "\n";
+    << "depth: " << depth_ << "\n"
+    << "origin: " << origin_->getName() <<"\n";
     // << "Local Transform: " << glm::to_string(localTransform_) << "\n"
     // << "World Transform: " << glm::to_string(worldTransform_) << "\n";
     return os;
