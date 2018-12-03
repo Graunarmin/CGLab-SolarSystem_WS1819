@@ -4,6 +4,7 @@
 // vertex attributes of VAO
 layout(location = 0) in vec3 in_Position;
 layout(location = 1) in vec3 in_Normal;
+layout(location = 2) in vec2 in_TexCoords;
 
 //Matrix Uniforms as specified with glUniformMatrix4fv
 uniform mat4 ModelMatrix;
@@ -18,13 +19,14 @@ out vec3 planet_color;
 out vec3 light_pos;
 out vec3 fragment_pos;
 out vec3 camera_pos;
+out vec2 tex_coords;
 
 void main(void)
 {
 	gl_Position = (ProjectionMatrix  * ViewMatrix * ModelMatrix) * vec4(in_Position, 1.0);
 	pass_Normal = (NormalMatrix * vec4(in_Normal, 0.0)).xyz;
 	fragment_pos = (ModelMatrix * vec4(in_Position, 1.0)).xyz;
-	//invert viewMatrix, otherwise the planets look like bumble-bees in cel shading
-	camera_pos = (inverse(ViewMatrix) * vec4(fragment_pos,1.0)).xyz; 
+	camera_pos = (ViewMatrix * vec4(fragment_pos,1.0)).xyz; 
 	planet_color = PlanetColor;
+	tex_coords = in_TexCoords;
 }

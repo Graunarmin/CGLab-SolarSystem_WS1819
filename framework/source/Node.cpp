@@ -169,3 +169,90 @@ std::ostream& operator<<(std::ostream& os, Node const& n){
 
 
 
+// ------- virtual functions which are overriden by GeometryNode, no need to implement them here -------
+pixel_data Node::getTexture() const{
+    return pixel_data{};
+}
+
+void Node::setTexture(std::string const& texPath){
+    //No Need to be implemented in Node
+}
+
+std::string Node::getTexpath() const{
+    return "no Path";
+}
+
+void Node::setTexPath(std::string const& texPath){
+    //nothing to do here
+}
+
+texture_object Node::getTextureObject() const{
+    return texture_object{};
+}
+
+void Node::setTextureObject(texture_object const& textureObject){
+    //nothing to do here
+}
+
+std::map<std::string, pixel_data> Node::getTextures() const{
+    return std::map<std::string, pixel_data>{};
+}
+
+void Node::setTextures(std::vector<std::string> const& texPaths){
+    //No Need to be implemented in Node
+}
+
+std::vector<std::string> Node::getTexpaths() const{
+    return std::vector<std::string>{};
+}
+
+void Node::setTexPaths(std::vector<std::string> const& texPaths){
+    //nothing to do here
+}
+
+//Normalmapping
+std::string Node::getNormalTexpath() const{
+    return std::string{};
+}
+
+void Node::setNormalTexPath(std::string const& normalTexPath){
+    //nothing to do here
+}
+
+
+pixel_data Node::getNormalTexture() const{
+    return pixel_data{};
+}
+
+void Node::setNormalTexture(std::string const& normalTexPath){
+    //nothing to do here
+}
+
+texture_object Node::getNormalTextureObject() const{
+    return texture_object{};
+}
+
+void Node::setNormalTextureObject(texture_object const& normalTextureObject){
+    //nothing to do here
+}
+
+bool Node::hasNormapMapping() const {
+    return false;
+}
+
+void Node::setHasNormalMapping(bool normalMapping) {
+    //nothin to do here
+}
+
+
+// int Node::getPlanetID() const{
+//     return 0;
+// }
+
+// void Node::setPlanetID(int id){
+//     //nothing to do here
+// }
+
+
+
+

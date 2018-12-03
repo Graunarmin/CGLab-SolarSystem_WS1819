@@ -11,6 +11,10 @@
 #include "glm/ext.hpp"
 #include <memory>
 
+#include "pixel_data.hpp"
+#include "texture_loader.hpp"
+#include "structs.hpp"
+
 class Node{
 
     public:
@@ -50,6 +54,33 @@ class Node{
 
         //kann überschrieben werden:
         virtual std::ostream& print(std::ostream& os) const;
+        virtual pixel_data getTexture() const;
+        virtual void setTexture(std::string const& texPath);
+        virtual std::string getTexpath() const;
+        virtual void setTexPath(std::string const& texPath);
+        virtual texture_object getTextureObject() const;
+        virtual void setTextureObject(texture_object const& textureObject);
+
+        virtual std::vector<std::string> getTexpaths() const;
+        virtual void setTexPaths(std::vector<std::string> const& texPaths);
+        virtual std::map<std::string, pixel_data> getTextures() const;
+        virtual void setTextures(std::vector<std::string> const& texPaths);
+
+        //Normalmapping
+        virtual std::string getNormalTexpath() const;
+        virtual void setNormalTexPath(std::string const& normalTexPath);
+
+        virtual pixel_data getNormalTexture() const;
+        virtual void setNormalTexture(std::string const& normalTexPath);
+
+        virtual texture_object getNormalTextureObject() const;
+        virtual void setNormalTextureObject(texture_object const& normalTextureObject);
+
+        virtual bool hasNormapMapping() const;
+        virtual void setHasNormalMapping(bool normalMapping);
+
+        // virtual int getPlanetID() const;
+        // virtual void setPlanetID(int id);
 
         void setColor(glm::fvec3 const& color);
         glm::fvec3 getColor() const;

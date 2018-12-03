@@ -43,11 +43,4 @@ struct shader_program {
   std::map<std::string, GLint> u_locs{};
 };
 
-/*struct planet{
-  std::string name_;
-  float originDistance_;
-  float size_;
-  
-
-}*/
 #endif

@@ -9,6 +9,7 @@
 #include <string>
 #include "GeometryNode.hpp"
 #include "PointLightNode.hpp"
+#include "texture_loader.hpp"
 
 // gpu representation of model
 class ApplicationSolar : public Application {
@@ -29,6 +30,8 @@ class ApplicationSolar : public Application {
   void render() const;
   void planetTransformations(std::list<std::shared_ptr<Node>> const& childrenList) const;
   void drawOrbit(std::shared_ptr<Node> const& planet) const;
+  void loadPlanetTextures(std::list<std::shared_ptr<Node>> const& childrenList);
+  void loadNormalTextures(std::shared_ptr<Node> const& planet);
 
   //void setSun();
   //PointLightNode getSun() const;
@@ -37,7 +40,9 @@ class ApplicationSolar : public Application {
  protected:
   void initializeShaderPrograms();
   void initializeGeometry();
+  void initializeSkybox();
   void initializePlanets();
+  void initializeTextures();
   void initializeStars();
   void initializeOrbits();
   // update uniform values
@@ -53,6 +58,9 @@ class ApplicationSolar : public Application {
   model_object planet_object;
   model_object star_object;
   model_object orbit_object;
+  model_object skybox_object;
+
+  GeometryNode SkyBox_;
 
   SceneGraph sceneGraph_;
 
@@ -68,7 +76,7 @@ class ApplicationSolar : public Application {
 
   PointLightNode sun_l;
 
-  bool celShading_;
+ int shaderMode_;
 };
 
 #endif
