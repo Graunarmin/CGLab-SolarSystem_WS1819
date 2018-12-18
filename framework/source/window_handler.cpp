@@ -106,7 +106,8 @@ GLFWwindow* initialize(glm::uvec2 const& resolution, unsigned ver_major, unsigne
 
   std::cout << "Zoom in: i \nZoom out: o \nMove Camera up: w \nMove Camera down: s \n"
   << "Move Camera left: a \nMove Camera right: d\n" 
-  << "Normal Shading: 1 \nCel Shading: 2 \nNormal Mapping: 3 \nGreyscales: 4" << std::endl;
+  << "Default Shading: 1 \nCel Shading: 2 \nNormal Mapping: 3 \nGreyscales: 7 \n"
+  << "Horizontal Mirroring: 8 \nVertical Mirroring: 9 \nGaussian Blur: 0" << std::endl;
 
   // activate error checking after each gl function call
   watch_gl_errors();
@@ -131,6 +132,7 @@ void set_callback_object(GLFWwindow* window, Application* app) {
   };
   glfwSetKeyCallback(window, key_func);
   // allow free mouse movement
+  //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL); 
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
   auto mouse_func = [](GLFWwindow* w, double a, double b) {
         static_cast<Application*>(glfwGetWindowUserPointer(w))->mouse_callback(w, a, b);
